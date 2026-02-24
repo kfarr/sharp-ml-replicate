@@ -6,8 +6,6 @@ Based on https://github.com/apple/ml-sharp and the SHARP-ML Modal deployment.
 """
 
 import io
-import os
-import subprocess
 import time
 from pathlib import Path
 
@@ -265,8 +263,7 @@ def fast_save_ply_bytes(gaussians, f_px: float, image_shape: tuple) -> bytes:
 # COG PREDICTOR
 # =============================================================================
 
-MODEL_URL = "https://ml-site.cdn-apple.com/models/sharp/sharp_2572gikvuh.pt"
-MODEL_CACHE_DIR = "/tmp/sharp-models"
+MODEL_PATH = "/opt/sharp-models/sharp_2572gikvuh.pt"
 INTERNAL_RESOLUTION = (1536, 1536)
 
 
@@ -287,21 +284,9 @@ class SharpPredictor(BasePredictor):
             self.device = torch.device("cpu")
             print("Warning: CUDA not available, using CPU")
 
-        # Download checkpoint if not cached
-        os.makedirs(MODEL_CACHE_DIR, exist_ok=True)
-        checkpoint_path = Path(MODEL_CACHE_DIR) / "sharp_2572gikvuh.pt"
-        if not checkpoint_path.exists():
-            print(f"Downloading Sharp model checkpoint from {MODEL_URL}...")
-            subprocess.run(
-                ["wget", "-q", MODEL_URL, "-O", str(checkpoint_path)],
-                check=True,
-            )
-            print("Model checkpoint downloaded.")
-        else:
-            print("Using cached model checkpoint.")
-
-        # Load model weights
-        print("Loading model weights...")
+        # Load baked-in model weights
+        checkpoint_path = Path(MODEL_PATH)
+        print(f"Loading model weights from {checkpoint_path}...")
         state_dict = torch.load(
             checkpoint_path, weights_only=True, map_location=self.device
         )

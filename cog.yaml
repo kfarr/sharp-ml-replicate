@@ -40,4 +40,5 @@ build:
     - "rm -f /opt/ml-sharp/.python-version"
     - "cd /opt/ml-sharp && pip install -e . --no-deps"
     - "python -c 'from sharp.models import create_predictor, PredictorParams; print(\"Sharp model imports OK\")'"
+    - "mkdir -p /opt/sharp-models && wget -q https://ml-site.cdn-apple.com/models/sharp/sharp_2572gikvuh.pt -O /opt/sharp-models/sharp_2572gikvuh.pt"
 predict: "predict.py:SharpPredictor"

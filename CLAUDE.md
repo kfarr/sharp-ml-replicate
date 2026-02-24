@@ -37,10 +37,9 @@ Apple's ml-sharp repo contains `.python-version` specifying Python 3.13, but the
 
 ## Architecture Notes
 - `predict.py` includes GPU-optimized postprocessing (quaternion conversion, SVD decomposition) replacing upstream's slow CPU-based scipy code
-- Model weights (~700MB) are downloaded at runtime in `setup()` from Apple's CDN, not bundled in the image
+- Model weights (~700MB) are baked into the Docker image at `/opt/sharp-models/sharp_2572gikvuh.pt` (downloaded during build)
 - Internal resolution is fixed at 1536x1536
 - Output is a .ply file containing 3D Gaussian splats
-- First run has ~2 min cold start (model download + warmup); subsequent runs are fast
 
 ## Dependencies (torch version)
 The `torch>=2.0.0` constraint resolves to torch 2.10.0 (latest). If CUDA compatibility issues arise, pin to a specific version.
