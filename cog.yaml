@@ -37,6 +37,7 @@ build:
     - "click"
   run:
     - "git clone https://github.com/apple/ml-sharp.git /opt/ml-sharp"
+    - "rm -f /opt/ml-sharp/.python-version"
     - "cd /opt/ml-sharp && pip install -e . --no-deps"
     - "python -c 'from sharp.models import create_predictor, PredictorParams; print(\"Sharp model imports OK\")'"
 predict: "predict.py:SharpPredictor"
